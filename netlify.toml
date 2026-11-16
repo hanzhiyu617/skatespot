@@ -2,3 +2,11 @@
   command = "([ -x node_modules/.bin/vite ] || npm ci --include=dev) && npm run build"
   publish = "dist"
   functions = "netlify/functions"
+
+# The Cloudinary build plugin is installed from the Netlify UI and fails without a
+# cloud name. This site serves no local or HTML <img> images, so the plugin has
+# nothing to rewrite; this placeholder only keeps it from failing the build.
+# Uninstall the plugin in Netlify (Project configuration → Build & deploy → Build plugins),
+# then remove this block. If you do use Cloudinary, replace it with your real cloud name.
+[build.environment]
+  CLOUDINARY_CLOUD_NAME = "unused-placeholder"

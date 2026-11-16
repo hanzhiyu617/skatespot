@@ -56,12 +56,24 @@ export function isValidSpot(value) {
   );
 }
 
+export function isAdminConfigured() {
+  return Boolean((process.env.ADMIN_TOKEN || '').trim());
+}
+
 export function isAdminRequest(request) {
-  const expected = process.env.ADMIN_TOKEN;
-  const authorization = request.headers.get('authorization') || '';
-  const provided = authorization.startsWith('Bearer ') ? authorization.slice(7) : '';
-  if (!expected) return false;
+  const expected = (process.env.ADMIN_TOKEN || '').trim();
+  const authorization = (request.headers.get('authorization') || '').trim();
+  const provided = /^Bearer\s+/i.test(authorization) ? authorization.replace(/^Bearer\s+/i, '').trim() : '';
+  if (!expected || !provided) return false;
   const expectedBytes = Buffer.from(expected);
   const providedBytes = Buffer.from(provided);
   return providedBytes.length === expectedBytes.length && timingSafeEqual(providedBytes, expectedBytes);
+}
+
+export function adminAuthError(request) {
+  if (!isAdminConfigured()) {
+    return jsonResponse({ error: 'ADMIN_TOKEN is not configured on the server. Set it in Netlify environment variables and redeploy.' }, 503);
+  }
+  if (!isAdminRequest(request)) return jsonResponse({ error: 'Invalid admin token.' }, 401);
+  return null;
 }

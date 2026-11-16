@@ -1,8 +1,9 @@
 import { getPool } from '../lib/db.mjs';
-import { errorResponse, isAdminRequest, jsonResponse } from '../lib/http.mjs';
+import { adminAuthError, errorResponse, jsonResponse } from '../lib/http.mjs';
 
 export default async function deleteSpotHandler(request, context) {
-  if (!isAdminRequest(request)) return jsonResponse({ error: 'Invalid admin token.' }, 401);
+  const authError = adminAuthError(request);
+  if (authError) return authError;
   if (request.method !== 'DELETE') return jsonResponse({ error: 'Method not allowed.' }, 405);
 
   const { id } = context.params || {};
