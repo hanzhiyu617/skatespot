@@ -1,0 +1,75 @@
+<!doctype html>
+<html lang="ko">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="description" content="Find skateboarding spots and skateparks across Korea." />
+    <title>skatespot — Spot map</title>
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <main class="app-shell">
+      <aside class="panel" aria-label="Skatepark search and directory">
+        <header class="brand-row">
+          <a class="brand" href="#top" aria-label="skatespot home">skate<br />spot</a>
+          <div class="header-actions"><div class="language-switcher" aria-label="Language"><button data-language="ko">한국어</button><button data-language="zh">中文</button><button data-language="en">EN</button></div><button class="icon-button" id="open-submit" aria-label="Submit a spot" title="Submit a spot">+</button></div>
+        </header>
+
+        <section class="intro" id="top">
+          <p class="eyebrow" data-i18n="eyebrow">SKATE SPOTS IN KOREA</p>
+          <div id="headline-root" data-text="Find your next line." aria-live="polite"><h1 data-i18n="headline">Find your next line.</h1></div>
+          <p data-i18n="intro">Skateparks, street spots, and indoor sessions—mapped for the community.</p>
+        </section>
+
+        <label class="search" for="search-input">
+          <span aria-hidden="true">⌕</span>
+          <input id="search-input" type="search" data-i18n-placeholder="search" placeholder="Search a spot or city" autocomplete="off" />
+        </label>
+
+        <section class="filters" aria-label="Filters">
+          <div class="filter-group">
+            <p data-i18n="region">REGION</p>
+            <div class="chips" id="region-filters"></div>
+          </div>
+          <div class="filter-group">
+            <p data-i18n="type">TYPE</p>
+            <div class="chips" id="type-filters"></div>
+          </div>
+        </section>
+
+        <div class="directory-heading"><span id="result-count">0 spots</span><button id="clear-filters" class="text-button" data-i18n="clear">Clear</button></div>
+        <p id="app-message" class="app-message" role="status" hidden></p>
+        <section class="spot-list" id="spot-list" aria-live="polite"></section>
+        <p class="local-note" data-i18n="localNote">Community submissions are reviewed before they appear publicly.</p>
+      </aside>
+
+      <section class="map-area" aria-label="Map">
+        <div id="map" role="application" aria-label="Map of Korean skate spots"></div>
+        <div class="map-overlay"><span class="status-dot"></span><span id="map-status">OpenStreetMap · local mode</span></div>
+        <button class="mobile-submit" id="open-submit-mobile" data-i18n="addSpot">+ Add a spot</button>
+      </section>
+    </main>
+
+    <dialog id="spot-dialog">
+      <form id="spot-form" method="dialog">
+        <div class="dialog-header"><div><p class="eyebrow" data-i18n="community">COMMUNITY</p><h2 data-i18n="addSpotTitle">Add a spot</h2></div><button class="close-button" id="close-spot-dialog" type="button" value="cancel" aria-label="Close">×</button></div>
+        <p class="form-note" data-i18n="formNote">Your spot will be sent to the review queue. It is not public until approved.</p>
+        <label><span data-i18n="nameEn">English name</span><input name="nameEn" required maxlength="80" placeholder="e.g. Mapo ledges" /></label>
+        <label><span data-i18n="nameKo">한국어 이름</span><input name="nameKo" required maxlength="80" placeholder="예: 마포 렛지" /></label>
+        <label><span data-i18n="nameZh">中文名称</span><input name="nameZh" required maxlength="80" placeholder="例如：麻浦台阶" /></label>
+        <label><span data-i18n="city">City / region</span><select name="region" required><option value="" data-i18n="select">Select one</option><option value="Seoul">Seoul</option><option value="Gyeonggi">Gyeonggi</option><option value="Busan">Busan</option><option value="Incheon">Incheon</option><option value="Gangwon">Gangwon</option><option value="Other">Other</option></select></label>
+        <label><span data-i18n="type">Type</span><select name="type" required><option value="" data-i18n="select">Select one</option><option value="Outdoor">Outdoor</option><option value="Indoor">Indoor</option><option value="Street">Street</option></select></label>
+        <div class="coordinate-row"><label><span data-i18n="latitude">Latitude</span><input name="lat" type="number" step="any" min="33" max="39" required placeholder="37.5665" /></label><label><span data-i18n="longitude">Longitude</span><input name="lng" type="number" step="any" min="124" max="132" required placeholder="126.9780" /></label></div>
+        <label><span data-i18n="notes">Notes</span> <span class="optional" data-i18n="optional">optional</span><textarea name="notes" maxlength="300" data-i18n-placeholder="notesPlaceholder" placeholder="Obstacles, opening hours, or useful details"></textarea></label>
+        <button class="submit-button" type="submit" data-i18n="submitReview">Submit for review</button>
+      </form>
+    </dialog>
+    <dialog id="review-dialog"><section class="review-panel"><div class="dialog-header"><div><p class="eyebrow" data-i18n="admin">ADMIN</p><h2 data-i18n="reviewTitle">Review queue</h2></div><button class="close-button" id="close-review" aria-label="Close">×</button></div><p class="form-note" data-i18n="reviewNote">Enter the server admin token to review submissions.</p><label><span data-i18n="adminToken">Admin token</span><input id="admin-token" type="password" autocomplete="current-password" /></label><button class="submit-button" id="load-review" type="button" data-i18n="loadQueue">Load queue</button><p class="form-error" id="review-error" role="alert"></p><div id="review-list"></div></section></dialog>
+
+    <template id="spot-card-template">
+      <article class="spot-card"><button class="spot-card-button"><div class="spot-card-top"><span class="spot-number"></span><span class="spot-type"></span></div><h3></h3><p class="spot-meta"></p><p class="spot-description"></p></button><div class="spot-rating"></div></article>
+    </template>
+    <script type="module" src="/app.js"></script>
+    <script type="module" src="/src/main.jsx"></script>
+  </body>
+</html>
