@@ -33,12 +33,13 @@ export default async function spotsHandler(request) {
       lng: Number(input.lng),
       descriptions: Object.fromEntries(languages.map(language => [language, input.descriptions?.[language] || '']))
     };
-    await pool.query(
+    const { rows } = await pool.query(
       `INSERT INTO spots (id, names, region, type, lat, lng, descriptions, status)
-       VALUES ($1, $2, $3, $4, $5, $6, $7, 'pending')`,
+       VALUES ($1, $2, $3, $4, $5, $6, $7, 'approved')
+       RETURNING created_at AS "createdAt"`,
       [spot.id, spot.names, spot.region, spot.type, spot.lat, spot.lng, spot.descriptions]
     );
-    return jsonResponse({ id: spot.id, status: 'pending' }, 201);
+    return jsonResponse({ ...spot, createdAt: rows[0].createdAt, status: 'approved' }, 201);
   } catch (error) {
     return errorResponse(error);
   }
