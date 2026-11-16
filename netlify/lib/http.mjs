@@ -57,7 +57,7 @@ export function isValidSpot(value) {
 }
 
 export function isAdminRequest(request) {
-  const expected = process.env.ADMIN_TOKEN;
+  const expected = process.env.ADMIN_TOKEN?.trim();
   const authorization = request.headers.get('authorization') || '';
   const provided = authorization.startsWith('Bearer ') ? authorization.slice(7) : '';
   if (!expected) return false;

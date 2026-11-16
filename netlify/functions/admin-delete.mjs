@@ -11,7 +11,8 @@ export default async function deleteSpotHandler(request, context) {
   }
 
   try {
-    const { rowCount } = await getPool().query('DELETE FROM spots WHERE id = $1', [id]);
+    const pool = await getPool();
+    const { rowCount } = await pool.query('DELETE FROM spots WHERE id = $1', [id]);
     if (!rowCount) return jsonResponse({ error: 'Spot not found.' }, 404);
     return jsonResponse({ id, status: 'deleted' });
   } catch (error) {

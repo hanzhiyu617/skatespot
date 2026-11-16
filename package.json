@@ -4,21 +4,26 @@
   "version": "1.0.0",
   "type": "module",
   "engines": {
-    "node": ">=22.13.0"
+    "node": "22.x"
   },
   "scripts": {
     "dev": "vite --host 127.0.0.1",
     "build": "vite build",
-    "db:migrate": "netlify database migrations apply",
-    "db:connect": "netlify database connect"
+    "build:vercel": "node scripts/vercel-build.mjs",
+    "start": "node server.mjs",
+    "test": "node --test",
+    "db:migrate": "node scripts/migrate-postgres.mjs",
+    "import:netlify": "node scripts/import-netlify.mjs",
+    "import:postgres": "node scripts/import-netlify-to-postgres.mjs"
   },
   "dependencies": {
-    "@netlify/database": "^2.0.3",
     "@gsap/react": "^2.1.2",
     "@hugeicons/core-free-icons": "^4.3.3",
     "@hugeicons/react": "^1.1.10",
+    "@netlify/database": "^2.0.3",
     "gsap": "^3.13.0",
     "leaflet": "^1.9.4",
+    "pg": "^8.23.1",
     "react": "^19.0.0",
     "react-dom": "^19.0.0"
   },

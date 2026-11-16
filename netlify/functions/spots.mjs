@@ -6,7 +6,7 @@ const languages = ['en', 'ko', 'zh'];
 
 export default async function spotsHandler(request) {
   try {
-    const pool = getPool();
+    const pool = await getPool();
     if (request.method === 'GET') {
       const { rows } = await pool.query(
         `SELECT id, names, region, type, lat, lng, descriptions, created_at AS "createdAt"

@@ -1,9 +1,14 @@
 import { defineConfig } from 'vite';
 import react from '@vitejs/plugin-react';
-import netlify from '@netlify/vite-plugin';
 
 export default defineConfig({
-  plugins: [react(), netlify()],
+  plugins: [react()],
+  server: {
+    proxy: {
+      '/api': 'http://127.0.0.1:3000',
+      '/healthz': 'http://127.0.0.1:3000'
+    }
+  },
   build: {
     rollupOptions: {
       output: {

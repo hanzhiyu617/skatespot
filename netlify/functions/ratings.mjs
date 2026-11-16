@@ -4,13 +4,24 @@ import { errorResponse, isValidVoterId, jsonResponse, readJsonBody } from '../li
 async function getSummary(pool, spotId, voterId) {
   const { rows } = await pool.query(
     `SELECT
-       COALESCE(ROUND(AVG(r.value)::numeric, 1), 0)::float AS average,
-       COUNT(r.value)::int AS count,
-       COALESCE(MAX(r.value) FILTER (WHERE r.voter_id = $2), 0)::int AS mine
+       COALESCE(ROUND(
+         (COALESCE(snapshot.total, 0) + COALESCE(r.total, 0))::numeric /
+         NULLIF(COALESCE(snapshot.count, 0) + COALESCE(r.count, 0), 0),
+         1
+       ), 0)::float AS average,
+       (COALESCE(snapshot.count, 0) + COALESCE(r.count, 0))::int AS count,
+       COALESCE(r.mine, 0)::int AS mine
      FROM spots s
-     LEFT JOIN ratings r ON r.spot_id = s.id
+     LEFT JOIN rating_snapshots snapshot ON snapshot.spot_id = s.id
+     LEFT JOIN (
+       SELECT spot_id,
+         SUM(value)::float AS total,
+         COUNT(*)::int AS count,
+         MAX(value) FILTER (WHERE voter_id = $2) AS mine
+       FROM ratings WHERE spot_id = $1 GROUP BY spot_id
+     ) r ON r.spot_id = s.id
      WHERE s.id = $1 AND s.status = 'approved'
-     GROUP BY s.id`,
+    `,
     [spotId, voterId]
   );
   return rows[0] || null;
@@ -18,20 +29,30 @@ async function getSummary(pool, spotId, voterId) {
 
 export default async function ratingsHandler(request) {
   try {
-    const pool = getPool();
+    const pool = await getPool();
     if (request.method === 'GET') {
       const voterId = new URL(request.url).searchParams.get('voterId');
       if (!isValidVoterId(voterId)) return jsonResponse({ error: 'A valid voter ID is required.' }, 400);
       const { rows } = await pool.query(
         `SELECT
            s.id,
-           COALESCE(ROUND(AVG(r.value)::numeric, 1), 0)::float AS average,
-           COUNT(r.value)::int AS count,
-           COALESCE(MAX(r.value) FILTER (WHERE r.voter_id = $1), 0)::int AS mine
+           COALESCE(ROUND(
+             (COALESCE(snapshot.total, 0) + COALESCE(r.total, 0))::numeric /
+             NULLIF(COALESCE(snapshot.count, 0) + COALESCE(r.count, 0), 0),
+             1
+           ), 0)::float AS average,
+           (COALESCE(snapshot.count, 0) + COALESCE(r.count, 0))::int AS count,
+           COALESCE(r.mine, 0)::int AS mine
          FROM spots s
-         LEFT JOIN ratings r ON r.spot_id = s.id
-         WHERE s.status = 'approved'
-         GROUP BY s.id`,
+         LEFT JOIN rating_snapshots snapshot ON snapshot.spot_id = s.id
+         LEFT JOIN (
+           SELECT spot_id,
+             SUM(value)::float AS total,
+             COUNT(*)::int AS count,
+             MAX(value) FILTER (WHERE voter_id = $1) AS mine
+           FROM ratings GROUP BY spot_id
+         ) r ON r.spot_id = s.id
+         WHERE s.status = 'approved'`,
         [voterId]
       );
       return jsonResponse(Object.fromEntries(rows.map(row => [row.id, {

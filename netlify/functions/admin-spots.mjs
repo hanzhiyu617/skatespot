@@ -6,7 +6,8 @@ export default async function adminSpotsHandler(request) {
   if (request.method !== 'GET') return jsonResponse({ error: 'Method not allowed.' }, 405);
 
   try {
-    const { rows } = await getPool().query(
+    const pool = await getPool();
+    const { rows } = await pool.query(
       `SELECT id, names, region, type, lat, lng, descriptions, status, created_at AS "createdAt"
        FROM spots ORDER BY created_at DESC, id`
     );

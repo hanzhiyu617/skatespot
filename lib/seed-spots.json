@@ -1,0 +1,104 @@
+[
+  {
+    "id": "seongsu",
+    "names": {
+      "en": "Seongsu Skatepark",
+      "ko": "성수 스케이트파크",
+      "zh": "圣水滑板公园"
+    },
+    "region": "Seoul",
+    "type": "Outdoor",
+    "lat": 37.5441,
+    "lng": 127.0557,
+    "descriptions": {
+      "en": "Concrete bowl, rails and a compact street course.",
+      "ko": "콘크리트 볼, 레일과 컴팩트한 스트리트 코스.",
+      "zh": "混凝土碗池、扶手和紧凑街式场地。"
+    }
+  },
+  {
+    "id": "nanji",
+    "names": {
+      "en": "Nanji Hangang Skatepark",
+      "ko": "난지 한강 스케이트파크",
+      "zh": "兰芝汉江滑板公园"
+    },
+    "region": "Seoul",
+    "type": "Outdoor",
+    "lat": 37.5692,
+    "lng": 126.8788,
+    "descriptions": {
+      "en": "Large riverside park with bowls, banks and ledges.",
+      "ko": "볼, 뱅크, 렛지가 있는 넓은 강변 파크.",
+      "zh": "江边大型滑板场，设有碗池、斜台和台阶。"
+    }
+  },
+  {
+    "id": "songdo",
+    "names": {
+      "en": "Songdo Skatepark",
+      "ko": "송도 스케이트파크",
+      "zh": "松岛滑板公园"
+    },
+    "region": "Incheon",
+    "type": "Outdoor",
+    "lat": 37.3863,
+    "lng": 126.6404,
+    "descriptions": {
+      "en": "Open concrete park near Songdo Central Park.",
+      "ko": "송도 센트럴파크 인근의 개방형 콘크리트 파크.",
+      "zh": "松岛中央公园附近的开放式混凝土滑板场。"
+    }
+  },
+  {
+    "id": "goyang",
+    "names": {
+      "en": "Goyang Skatepark",
+      "ko": "고양 스케이트파크",
+      "zh": "高阳滑板公园"
+    },
+    "region": "Gyeonggi",
+    "type": "Outdoor",
+    "lat": 37.6584,
+    "lng": 126.832,
+    "descriptions": {
+      "en": "Park with transition and beginner-friendly flow.",
+      "ko": "트랜지션과 초보자 친화적인 플로우를 갖춘 파크.",
+      "zh": "设有弧面和适合新手的流畅线路。"
+    }
+  },
+  {
+    "id": "busan",
+    "names": {
+      "en": "Busan Citizens Park",
+      "ko": "부산 시민공원",
+      "zh": "釜山市民公园"
+    },
+    "region": "Busan",
+    "type": "Street",
+    "lat": 35.1688,
+    "lng": 129.0556,
+    "descriptions": {
+      "en": "Public plaza terrain and smooth flatground.",
+      "ko": "공공 광장 지형과 매끄러운 플랫그라운드.",
+      "zh": "公共广场地形与平整地面。"
+    }
+  },
+  {
+    "id": "gangneung",
+    "names": {
+      "en": "Gangneung Skatepark",
+      "ko": "강릉 스케이트파크",
+      "zh": "江陵滑板公园"
+    },
+    "region": "Gangwon",
+    "type": "Outdoor",
+    "lat": 37.7519,
+    "lng": 128.8761,
+    "descriptions": {
+      "en": "Coastal concrete spot with banks and hips.",
+      "ko": "뱅크와 힙이 있는 해안 콘크리트 스팟.",
+      "zh": "带斜台与转角的海边混凝土场地。"
+    }
+  }
+]
